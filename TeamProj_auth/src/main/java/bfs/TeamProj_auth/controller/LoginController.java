@@ -1,24 +1,17 @@
 package bfs.TeamProj_auth.controller;
 
-import bfs.TeamProj_auth.domain.User;
 import bfs.TeamProj_auth.security.CookieUtil;
 import bfs.TeamProj_auth.security.JwtUtil;
 import bfs.TeamProj_auth.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-@Controller
+@RestController
 public class LoginController {
     private LoginService loginService;
 
@@ -32,17 +25,17 @@ public class LoginController {
 
     public LoginController() {}
 
-    @PostMapping("/login")
-    public String login(HttpServletResponse httpServletResponse, String username, String password, String redirect, Model model) {
-        Optional<User> possibleUser = loginService.validateLogin(username, password);
-        if(!possibleUser.isPresent()) {
-            model.addAttribute("error", "Invalid username or password!");
-            return "login";
-        }
-        String token = JwtUtil.generateToken(signingKey, username);
-        CookieUtil.create(httpServletResponse, jwtTokenCookieName, token, false, -1, "localhost");
-
-        return "redirect:" + redirect;
-    }
+//    @PostMapping("/login")
+//    public String login(HttpServletResponse httpServletResponse, String username, String password, String redirect, Model model) {
+//        Optional<User> possibleUser = loginService.validateLogin(username, password);
+//        if(!possibleUser.isPresent()) {
+//            model.addAttribute("error", "Invalid username or password!");
+//            return "login";
+//        }
+//        String token = JwtUtil.generateToken(signingKey, username);
+//        CookieUtil.create(httpServletResponse, jwtTokenCookieName, token, false, -1, "localhost");
+//
+//        return "redirect:" + redirect;
+//    }
 
 }
