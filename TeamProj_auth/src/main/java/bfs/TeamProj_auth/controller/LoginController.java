@@ -1,5 +1,6 @@
 package bfs.TeamProj_auth.controller;
 
+import bfs.TeamProj_auth.domain.User;
 import bfs.TeamProj_auth.security.CookieUtil;
 import bfs.TeamProj_auth.security.JwtUtil;
 import bfs.TeamProj_auth.service.LoginService;
@@ -25,17 +26,22 @@ public class LoginController {
 
     public LoginController() {}
 
-//    @PostMapping("/login")
-//    public String login(HttpServletResponse httpServletResponse, String username, String password, String redirect, Model model) {
-//        Optional<User> possibleUser = loginService.validateLogin(username, password);
-//        if(!possibleUser.isPresent()) {
-//            model.addAttribute("error", "Invalid username or password!");
-//            return "login";
-//        }
-//        String token = JwtUtil.generateToken(signingKey, username);
-//        CookieUtil.create(httpServletResponse, jwtTokenCookieName, token, false, -1, "localhost");
-//
-//        return "redirect:" + redirect;
-//    }
+    @PostMapping("/login")
+    public String login(HttpServletResponse httpServletResponse, String userName, String password, String redirect, Model model) {
+        String userStatus = loginService.validateLogin(userName, password);
+
+        if(userStatus.equals("Invalid password")){
+            return userStatus;
+        }
+        else if(userStatus.equals("Invalid userName")){
+            return userStatus;
+        }
+        else{
+            String token = JwtUtil.generateToken(signingKey, userName);
+            CookieUtil.create(httpServletResponse, jwtTokenCookieName, token, false, -1, "localhost");
+            return userStatus;
+        }
+
+    }
 
 }
