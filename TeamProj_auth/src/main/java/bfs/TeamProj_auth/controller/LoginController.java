@@ -6,13 +6,16 @@ import bfs.TeamProj_auth.security.JwtUtil;
 import bfs.TeamProj_auth.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", allowCredentials = "true")
 public class LoginController {
     private LoginService loginService;
 
@@ -27,7 +30,11 @@ public class LoginController {
     public LoginController() {}
 
     @PostMapping("/login")
-    public String login(HttpServletResponse httpServletResponse, String userName, String password, String redirect, Model model) {
+    public String login(HttpServletResponse httpServletResponse, String userName, String password, String redirect, Model model, HttpServletRequest httpServletRequest) {
+
+        String username = JwtUtil.getSubject(httpServletRequest, jwtTokenCookieName, signingKey);
+        System.out.println("the username in key: " + username);
+
         String userStatus = loginService.validateLogin(userName, password);
 
         if(userStatus.equals("Invalid password")){
