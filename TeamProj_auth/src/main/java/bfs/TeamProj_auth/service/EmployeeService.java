@@ -1,0 +1,36 @@
+package bfs.TeamProj_auth.service;
+
+
+import bfs.TeamProj_auth.dao.EmployeeDao;
+import bfs.TeamProj_auth.domain.Employee;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+public class EmployeeService {
+    @Autowired
+    private EmployeeDao employeeDao;
+
+    @Transactional
+    public Employee getEmployeeById(int id) {
+        return employeeDao.getEmployeeById(id);
+    }
+
+    @Transactional
+    public List<Employee> getAllEmployee() {
+        return employeeDao.getAllEmployee();
+    }
+
+    @Transactional
+    public Employee addEmployee(Employee employee) {
+        return employeeDao.addEmployee(employee);
+    }
+
+    @Transactional
+    public Employee updateEmployee(Employee employee) {
+        return employeeDao.updateEmployee(employee);
+    }
+}

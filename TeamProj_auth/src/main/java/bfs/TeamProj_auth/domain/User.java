@@ -26,9 +26,9 @@ public class User implements Serializable {
     private LocalDate modificationDate;
 
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "personId")
-//    private Person person;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "personId")
+    private Person person;
 //
 //    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
 //    private UserRole userRole;

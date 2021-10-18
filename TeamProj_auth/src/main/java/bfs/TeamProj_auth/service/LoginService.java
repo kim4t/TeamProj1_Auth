@@ -3,9 +3,7 @@ package bfs.TeamProj_auth.service;
 import bfs.TeamProj_auth.dao.RoleDao;
 import bfs.TeamProj_auth.dao.UserDao;
 import bfs.TeamProj_auth.dao.UserRoleDao;
-import bfs.TeamProj_auth.domain.Role;
-import bfs.TeamProj_auth.domain.User;
-import bfs.TeamProj_auth.domain.UserRole;
+import bfs.TeamProj_auth.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +17,14 @@ public class LoginService {
     private UserRoleDao userRoleDao;
     private RoleDao roleDao;
 
+    @Autowired
+    private ApplicationWorkFlowService applicationWorkFlowService;
+    @Autowired
+    private EmployeeService employeeService;
+    @Autowired
+    private PersonService personService;
+    @Autowired
+    private UserService userService;
     @Autowired
     public LoginService(UserDao userDao, UserRoleDao userRoleDao, RoleDao roleDao) {
         this.userDao = userDao;
@@ -35,7 +41,12 @@ public class LoginService {
                 Optional<UserRole> userRole = userRoleDao.getAllUserRole().stream().filter(u -> u.getUser().getId().equals(userId)).findAny();
                 if(userRole.isPresent()){
                     int roleId = userRole.get().getRole().getId();
-                    return roleDao.getRoleById(roleId).getRoleName();
+                    String role = roleDao.getRoleById(roleId).getRoleName();
+                    System.out.println(role);
+                    if(role.equals("HR"))
+                        return role;
+                    else
+                        return checkVisaStatus(user);
                 }
                 System.out.println("it is null");
                 return "error";
@@ -45,7 +56,16 @@ public class LoginService {
             }
         }
         return "Invalid userName";
-
     }
-
+    @Transactional
+    public String checkVisaStatus(Optional<User> u){
+        Person p = personService.getPersonByEmail(u.get().getEmail());
+        Optional<Employee> e = employeeService.getAllEmployee().stream().filter(x -> x.getPerson().getId().equals(p.getId())).findAny();
+        String status = applicationWorkFlowService.getApplicationWorkFlowByEmployeeId(e.get().getId()).getStatus();
+        if(status.equals("rejected"))
+            return "rejected";
+        if(status.equals("Onboarding"))
+            return "pending";
+        return "employee";
+    }
 }
