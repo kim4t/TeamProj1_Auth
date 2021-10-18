@@ -32,9 +32,6 @@ public class LoginController {
     @PostMapping("/login")
     public String login(HttpServletResponse httpServletResponse, String userName, String password, String redirect, Model model, HttpServletRequest httpServletRequest) {
 
-        String username = JwtUtil.getSubject(httpServletRequest, jwtTokenCookieName, signingKey);
-        System.out.println("the username in key: " + username);
-
         String userStatus = loginService.validateLogin(userName, password);
 
         if(userStatus.equals("Invalid password")){
