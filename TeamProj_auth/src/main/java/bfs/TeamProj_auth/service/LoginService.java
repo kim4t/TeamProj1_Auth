@@ -62,9 +62,9 @@ public class LoginService {
         Person p = personService.getPersonByEmail(u.get().getEmail());
         Optional<Employee> e = employeeService.getAllEmployee().stream().filter(x -> x.getPerson().getId().equals(p.getId())).findAny();
         String status = applicationWorkFlowService.getApplicationWorkFlowByEmployeeId(e.get().getId()).getStatus();
-        if(status.equals("Onboard rejected"))
+        if(status.equals("Onboarding rejected"))
             return "rejected";
-        if(status.equals("Onboard pending"))
+        if(status.equals("Onboarding pending"))
             return "pending";
         return "employee";
     }
