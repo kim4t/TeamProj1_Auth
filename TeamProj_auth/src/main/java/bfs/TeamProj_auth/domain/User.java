@@ -25,10 +25,10 @@ public class User implements Serializable {
     @Column(name = "modificationDate", nullable = false, length = 250)
     private LocalDate modificationDate;
 
-
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "personId")
     private Person person;
+
 //
 //    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
 //    private UserRole userRole;
