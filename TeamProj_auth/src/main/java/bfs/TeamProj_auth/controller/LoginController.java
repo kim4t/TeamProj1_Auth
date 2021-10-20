@@ -33,7 +33,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(HttpServletResponse httpServletResponse, String userName, String password, String redirect, Model model, HttpServletRequest httpServletRequest) {
+    public String login(HttpServletResponse httpServletResponse, String userName, String password, HttpServletRequest httpServletRequest) {
 
         String userStatus = loginService.validateLogin(userName, password);
 
@@ -41,7 +41,7 @@ public class LoginController {
             return userStatus;
         } else if (userStatus.equals("Invalid userName")) {
             return userStatus;
-        } else  {
+        } else {
             String token = JwtUtil.generateToken(signingKey, userName);
             CookieUtil.create(httpServletResponse, jwtTokenCookieName, token, false, -1, "localhost");
             System.out.println(userStatus);
